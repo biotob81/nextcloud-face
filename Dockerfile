@@ -3,26 +3,24 @@
 FROM nextcloud:apache as builder
 
 # Build and install dlib on builder
-RUN apt-get update ; \
+RUN apt-get update && \
     apt-get install -y build-essential wget cmake libx11-dev libopenblas-dev shtool
 
-ARG DLIB_BRANCH=v19.24
-RUN cd; \
-    wget -c -q https://github.com/davisking/dlib/archive/$DLIB_BRANCH.tar.gz \
+RUN wget -c -q https://github.com/davisking/dlib/archive/$DLIB_BRANCH.tar.gz \
     && tar xf $DLIB_BRANCH.tar.gz \
     && mv dlib-* dlib \
     && cd dlib/dlib \
     && mkdir build \
     && cd build \
-    && cmake -DBUILD_SHARED_LIBS=ON --config Release .. \
+    && cmake -DBUILD_SHARED_LIBS=ON .. \
     && make \
     && make install
+
 
 # Build and install PDLib on builder
 ARG PDLIB_BRANCH=master
 RUN apt-get install unzip
-RUN cd; \
-    wget -c -q https://github.com/matiasdelellis/pdlib/archive/$PDLIB_BRANCH.zip \
+RUN wget -c -q https://github.com/matiasdelellis/pdlib/archive/$PDLIB_BRANCH.zip \
     && unzip $PDLIB_BRANCH \
     && mv pdlib-* pdlib \
     && cd pdlib \
@@ -38,8 +36,7 @@ RUN echo "extension=pdlib.so" > /usr/local/etc/php/conf.d/pdlib.ini
 
 # Test PDlib installation on builer
 RUN apt-get install -y git
-RUN cd; \
-    git clone https://github.com/matiasdelellis/pdlib-min-test-suite.git \
+RUN git clone https://github.com/matiasdelellis/pdlib-min-test-suite.git \
     && cd pdlib-min-test-suite \
     && make
 
@@ -65,53 +62,40 @@ RUN echo 'memory_limit=${MEMORY_LIMIT}' > /usr/local/etc/php/conf.d/memory-limit
 
 # At this point you meet all the dependencies to install the application
 # If is available you can skip this step and install the application from the application store
-ARG FR_BRANCH=master
+#ARG FR_BRANCH=master
 RUN apt-get install -y wget unzip nodejs npm
-RUN wget -c -q -O facerecognition https://github.com/matiasdelellis/facerecognition/archive/$FR_BRANCH.zip \
-  && unzip facerecognition \
-  && mv facerecognition-*  /usr/src/nextcloud/facerecognition \
-  && cd /usr/src/nextcloud/facerecognition \
-  && make; \
 
-RUN set -ex; \
-
-RUN set -ex; \
+RUN set -ex && \
     apt-get update; \
     apt-get install -y --no-install-recommends \
-        ffmpeg \
-        libmagickcore-6.q16-6-extra \
-        procps \
-        smbclient \
-        supervisor \
-        libreoffice \
-        vim \
-        libfuse2 \
-        fuse \
-        fontconfig \
-        exiftool \
-        gnupg \
-    ; \
-
-RUN set -ex; \
-    \
+       && ffmpeg \
+       && libmagickcore-6.q16-6-extra \
+       && procps \
+       && smbclient \
+       && supervisor \
+       && libreoffice \
+       && nano \
+       && libfuse2 \
+       && fuse \
+       && fontconfig \
+       && exiftool \
+       && gnupg \
+; 
+RUN set -ex && \
     savedAptMark="$(apt-mark showmanual)"; \
-    \
-    apt-get update; \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
-        libbz2-dev \
-        libc-client-dev \
-        libkrb5-dev \
-        libsmbclient-dev \
+       && libbz2-dev \
+       && libc-client-dev \
+       && libkrb5-dev \
+       && libsmbclient-dev \
     ; \
-    \
+    
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl; \
-    docker-php-ext-install \
-        bz2 \
-        imap \
-    ; \
+    docker-php-ext-install bz2 imap; \
     pecl install smbclient; \
     docker-php-ext-enable smbclient; \
-    \
+    
 # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
     apt-mark auto '.*' > /dev/null; \
     apt-mark manual $savedAptMark; \
@@ -138,6 +122,6 @@ COPY supervisord.conf /
 ENV NEXTCLOUD_UPDATE=1
 ENV PHP_MEMORY_LIMIT=1G
 
-RUN echo '*/30 * * * * php -f /var/www/html/occ face:background_job -t 900' >> /var/spool/cron/crontabs/www-data
+#RUN echo '*/30 * * * * php -f /var/www/html/occ face:background_job -t 900' >> /var/spool/cron/crontabs/www-data
 RUN sed -i -e '/^<VirtualHost/,/<\/VirtualHost>/ { /<\/VirtualHost>/ i\Header always set Strict-Transport-Security "max-age=15552000; includeSubDomain"' -e '}' /etc/apache2/sites-enabled/000-default.conf
 CMD ["/usr/bin/supervisord", "-c", "/supervisord.conf"]
