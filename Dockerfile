@@ -47,8 +47,8 @@ RUN cd; \
 FROM nextcloud:apache
 
 # Install dependencies to image
-RUN apt-get update ; \
-    apt-get install -y libopenblas-base
+#RUN apt-get update ; \
+#    apt-get install -y libopenblas-base
 
 # Install dlib and PDlib to image
 COPY --from=builder /usr/local/lib/libdlib.so* /usr/local/lib/
