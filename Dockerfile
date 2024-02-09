@@ -81,10 +81,11 @@ RUN apt-get install -y git wget
 RUN git clone https://github.com/matiasdelellis/pdlib-min-test-suite.git \
     && cd pdlib-min-test-suite \
     && make
-RUN apt install smbclient libsmbclient-dev \
+    
+RUN apt-get update && apt-get install -y smbclient libsmbclient-dev \
     && pecl install smbclient \
-    && docker-php-ext-enable smbclient && \
-    rm -rf /var/lib/apt/lists/*
+    && docker-php-ext-enable smbclient \
+    && rm -rf /var/lib/apt/lists/*
 #
 # At this point you meet all the dependencies to install the application
 # If is available you can skip this step and install the application from the application store
