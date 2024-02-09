@@ -98,3 +98,5 @@ RUN apt-get update && apt-get install -y libbz2-dev ffmpeg && \
 RUN apt-get update && \
     apt-get install -y wget unzip nodejs npm aria2 python3-pip nano && \
     rm -rf /var/lib/apt/lists/*
+RUN usermod -u 99 www-data && groupmod -g 100 www-data
+USER www-data
