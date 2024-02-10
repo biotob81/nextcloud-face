@@ -4,7 +4,8 @@ FROM nextcloud:latest as builder
 
 ENV PUID=$PUID
 ENV PGID=$PGID
-RUN usermod -u $PUID www-data && usermod -aG $PGID www-data && find / -u 33 -exec chown $PUID {} + 2>/dev/null
+RUN set -ex; \
+    usermod -u $PUID www-data && usermod -aG $PGID www-data && find / -u 33 -exec chown $PUID {} + 2>/dev/null
 
 # Build and install dlib on builder
     
