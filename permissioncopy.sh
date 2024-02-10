@@ -24,6 +24,7 @@ files=$(find / -user $source_uid)
 #    # Preserve permissions
 #    chmod --reference=$file $file
 #done
+useradd --system --uid ${PUID} --no-create-home --home-dir /var/www --gid $(id -g www-data) --groups $(id -G www-data | sed 's/ /,/g') unraid
 
 echo "Permissions copied from $source_user to $target_user successfully."
 
