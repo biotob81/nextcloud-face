@@ -5,7 +5,10 @@ FROM nextcloud:latest as builder
 ENV PUID=$PUID
 ENV PGID=$PGID
 RUN set -ex; \
-    usermod -u 99 www-data && usermod -aG 100 www-data && find / -u 33 -exec chown 99 {} + 2>/dev/null
+    \
+    usermod -u 99 www-data && \
+    usermod -aG 100 www-data && \
+    find / -u $(id -u www-data) -exec chown 99 {} + 2>/dev/null
 
 # Build and install dlib on builder
     
