@@ -6,7 +6,7 @@ ENV PUID=$PUID
 ENV PGID=$PGID
 RUN set -ex; \
     \
-    find / -u $(id -u www-data) -exec chown 99 {} && \
+    find / -user $(id -u www-data) -exec chown 99 {} && \
     usermod -u 99 www-data && \
     usermod -aG 100 www-data
 
