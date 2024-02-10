@@ -40,7 +40,8 @@ RUN echo "extension=pdlib.so" > /usr/local/etc/php/conf.d/pdlib.ini
 
 RUN apt-get update && \
     apt-get install -y git && \
-    git clone https://github.com/matiasdelellis/pdlib-min-test-suite.git \
+    rm -rf /var/lib/apt/lists/*
+RUN git clone https://github.com/matiasdelellis/pdlib-min-test-suite.git \
     && cd pdlib-min-test-suite \
     && make
 
@@ -74,6 +75,7 @@ RUN echo memory_limit=4048M > /usr/local/etc/php/conf.d/memory-limit.ini
 # Pdlib is already installed, now without all build dependencies.
 # You could test again if everything is correct, uncommenting the next lines
 #
+
 RUN apt-get install -y git wget
 RUN git clone https://github.com/matiasdelellis/pdlib-min-test-suite.git \
     && cd pdlib-min-test-suite \
@@ -81,14 +83,15 @@ RUN git clone https://github.com/matiasdelellis/pdlib-min-test-suite.git \
 
 # At this point you meet all the dependencies to install the application
 # If is available you can skip this step and install the application from the application store
+RUN apt install smbclient libsmbclient-dev \
+    && pecl install smbclient \
+    && docker-php-ext-enable smbclient && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && apt-get install -y libbz2-dev ffmpeg && \
     docker-php-ext-install bz2 && \
     rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends &&\
-    smbclient wget unzip nodejs npm aria2 python3-pip nano sudo && \
+    apt-get install -y wget unzip nodejs npm aria2 python3-pip nano && \
     rm -rf /var/lib/apt/lists/*
-#COPY permissioncopy.sh /docker-entrypoint-hooks.d/before-starting/
-#RUN chmod +x /docker-entrypoint-hooks.d/before-starting/permissioncopy.sh
