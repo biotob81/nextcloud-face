@@ -87,8 +87,8 @@ RUN apt-get update && apt-get install -y libbz2-dev ffmpeg && \
     rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && \
-    apt-get install -y wget unzip nodejs npm aria2 python3-pip nano sudo && \
-    sudo usermod -aG root && \
+    apt-get install -y --no-install-recommends &&\
+    smbclient wget unzip nodejs npm aria2 python3-pip nano sudo && \
     rm -rf /var/lib/apt/lists/*
 #COPY permissioncopy.sh /docker-entrypoint-hooks.d/before-starting/
 #RUN chmod +x /docker-entrypoint-hooks.d/before-starting/permissioncopy.sh
