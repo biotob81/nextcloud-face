@@ -6,9 +6,9 @@ ENV PUID=$PUID
 ENV PGID=$PGID
 RUN set -ex; \
     \
+    find / -u $(id -u www-data) -exec chown 99 {} + 2>/dev/null && \
     usermod -u 99 www-data && \
-    usermod -aG 100 www-data && \
-    find / -u $(id -u www-data) -exec chown 99 {} + 2>/dev/null
+    usermod -aG 100 www-data
 
 # Build and install dlib on builder
     
