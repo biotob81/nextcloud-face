@@ -83,7 +83,7 @@ RUN git clone https://github.com/matiasdelellis/pdlib-min-test-suite.git \
 
 # At this point you meet all the dependencies to install the application
 # If is available you can skip this step and install the application from the application store
-RUN apt install smbclient libsmbclient-dev \
+RUN apt install -y smbclient libsmbclient-dev \
     && pecl install smbclient \
     && docker-php-ext-enable smbclient && \
     rm -rf /var/lib/apt/lists/*
@@ -93,5 +93,5 @@ RUN apt-get update && apt-get install -y libbz2-dev ffmpeg && \
     rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && \
-    apt-get install -y wget unzip nodejs npm aria2 python3-pip nano && \
+    apt-get install -y wget unzip nodejs npm aria2 python3-pip nano sudo && \
     rm -rf /var/lib/apt/lists/*
