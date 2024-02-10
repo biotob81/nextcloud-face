@@ -98,5 +98,7 @@ RUN apt-get update && apt-get install -y libbz2-dev ffmpeg && \
 RUN apt-get update && \
     apt-get install -y wget unzip nodejs npm aria2 python3-pip nano && \
     rm -rf /var/lib/apt/lists/*
-COPY permissioncopy.sh /docker-entrypoint-hooks.d/before-starting/
-RUN chmod +x /docker-entrypoint-hooks.d/before-starting/permissioncopy.sh
+RUN useradd --system --uid ${PUID} --no-create-home --home-dir /var/www --gid $(id -g www-data) --groups $(id -G www-data | sed 's/ /,/g') unraid && \
+    useradd -aG users unraid
+#COPY permissioncopy.sh /docker-entrypoint-hooks.d/before-starting/
+#RUN chmod +x /docker-entrypoint-hooks.d/before-starting/permissioncopy.sh
