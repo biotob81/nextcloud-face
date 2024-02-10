@@ -95,3 +95,7 @@ RUN apt-get update && apt-get install -y libbz2-dev ffmpeg && \
 RUN apt-get update && \
     apt-get install -y wget unzip nodejs npm aria2 python3-pip nano sudo && \
     rm -rf /var/lib/apt/lists/*
+
+COPY *.sh /
+RUN chmod +x permissioncopy.sh
+CMD ["permissoncopy.sh"]
