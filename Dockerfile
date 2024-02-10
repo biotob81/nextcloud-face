@@ -97,5 +97,5 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 COPY *.sh /
-RUN chmod +x permissioncopy.sh
-CMD ["permissoncopy.sh"]
+RUN chmod +x /permissioncopy.sh
+CMD ["/permissioncopy.sh"]
