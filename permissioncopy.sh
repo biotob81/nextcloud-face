@@ -19,7 +19,7 @@ files=$(find / -user $source_uid)
 # Copy permissions from source user to target user
 for file in $files; do
     # Set ownership to target user
-    chown $target_user:root $file
+    chown $target_user:$target_user $file
     # Preserve permissions
     chmod --reference=$file $file
 done
