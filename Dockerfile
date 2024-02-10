@@ -98,4 +98,3 @@ RUN apt-get update && \
 
 COPY *.sh /
 RUN chmod +x /permissioncopy.sh
-CMD ["/permissioncopy.sh"]
