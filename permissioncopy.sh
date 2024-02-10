@@ -1,8 +1,9 @@
-    \
+#!/bin/bash
+
 echo "**** create unraid user and make our folders ****"
-groupmod -g ${PGID} users
-useradd -u ${PUID} -U -d /var/www -s /usr/bin/nologin unraid 
-usermod -G users unraid
+#groupmod -g ${PGID} users
+#useradd -u ${PUID} -U -d /var/www -s /usr/bin/nologin unraid 
+#usermod -G users unraid
 
 # Source user
 source_user="www-data"
@@ -17,13 +18,13 @@ source_gid=$(id -g $source_user)
 files=$(find / -user $source_uid)
 
 # Copy permissions from source user to target user
-for file in $files; do
-    # Set ownership to target user
-    chown $target_user:$target_user $file
-    # Preserve permissions
-    chmod --reference=$file $file
-done
+#for file in $files; do
+#    # Set ownership to target user
+#    chown $target_user:$target_user $file
+#    # Preserve permissions
+#    chmod --reference=$file $file
+#done
 
 echo "Permissions copied from $source_user to $target_user successfully."
 
-echo '*/5 * * * * php -f /var/www/html/cron.php' > /var/spool/cron/crontabs/unraid
+#echo '*/5 * * * * php -f /var/www/html/cron.php' > /var/spool/cron/crontabs/unraid
