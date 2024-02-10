@@ -100,6 +100,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 ENV PUID=$PUID
 ENV PGID=$PGID
-RUN usermod -u $PUID www-data && sudo usermod -aG $PGID www-data && sudo find / -u 33 -exec chown $PUID {} + 2>/dev/null
+RUN usermod -u $PUID www-data && usermod -aG $PGID www-data && find / -u 33 -exec chown $PUID {} + 2>/dev/null
 #COPY permissioncopy.sh /docker-entrypoint-hooks.d/before-starting/
 #RUN chmod +x /docker-entrypoint-hooks.d/before-starting/permissioncopy.sh
