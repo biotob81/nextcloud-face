@@ -98,6 +98,8 @@ RUN apt-get update && apt-get install -y libbz2-dev ffmpeg && \
 RUN apt-get update && \
     apt-get install -y wget unzip nodejs npm aria2 python3-pip nano && \
     rm -rf /var/lib/apt/lists/*
-RUN usermod -u ${PUID} www-data && sudo usermod -aG ${PGID} www-data && sudo find / -u 33 -exec chown ${PUID} {} + 2>/dev/null
+ENV PUID=$PUID
+ENV PGID=$PGID
+RUN usermod -u $PUID www-data && sudo usermod -aG $PGID www-data && sudo find / -u 33 -exec chown $PUID {} + 2>/dev/null
 #COPY permissioncopy.sh /docker-entrypoint-hooks.d/before-starting/
 #RUN chmod +x /docker-entrypoint-hooks.d/before-starting/permissioncopy.sh
