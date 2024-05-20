@@ -15,3 +15,4 @@ usermod -u ${PUID} www-data
 usermod -aG ${PGID} www-data
 
 echo "Permissions copied from $source_user successfully."
+
