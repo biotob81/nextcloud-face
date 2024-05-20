@@ -16,3 +16,4 @@ jobs:
         run: |
          docker build . --tag ghcr.io/biotob81/nextcloud-face:latest
          docker push ghcr.io/biotob81/nextcloud-face:latest
+
